@@ -1,6 +1,7 @@
 const UsersModel = require("./models/userModel");
 const productModel = require("./models/productModel");
 const cartModel = require("./models/cartModel");
+const orderModel = require("./models/orderModel");
 
 exports.addUser = async (req, res) => {
   const data = new UsersModel({
@@ -49,5 +50,18 @@ exports.addCart = async (req, res) => {
     res.status(200).json(dataToSave);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+exports.addOrder = async (req, res) => {
+  const data = new orderModel({
+    orderId: req.body.orderId,
+    cartId: req.body.cartId,
+  });
+  try {
+    const dataToSave = await data.save();
+    res.status(200).json(dataToSave);
+  } catch (error) {
+    res.status(400).json({ messaghe: error.message });
   }
 };
