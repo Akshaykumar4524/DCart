@@ -1,0 +1,10 @@
+exports.product={
+    "productId":Number,
+    "productName":String,
+    "productCode":String,
+    "description":String,
+    "price":Number,
+    "rating":Number,
+    "manufacturer":String,
+    "osType":String
+}

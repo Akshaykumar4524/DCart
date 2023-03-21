@@ -1,5 +1,6 @@
 const UsersModel = require("./models/userModel");
 const productModel = require("./models/productModel");
+const cartModel = require("./models/cartModel");
 
 exports.addUser = async (req, res) => {
   const data = new UsersModel({
@@ -27,6 +28,22 @@ exports.addProduct = async (req, res) => {
     manufacturer: req.body.manufacturer,
     osType: req.body.osType,
   });
+  try {
+    const dataToSave = await data.save();
+    res.status(200).json(dataToSave);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.addCart = async (req, res) => {
+  const data = new cartModel({
+    cartId: req.body.cartId,
+    userName: req.body.userName,
+    productsInCart: req.body.productsInCart,
+    statusOfCart: req.body.statusOfCart,
+  });
+
   try {
     const dataToSave = await data.save();
     res.status(200).json(dataToSave);
