@@ -2,17 +2,52 @@ const UsersModel = require("./models/userModel");
 const productModel = require("./models/productModel");
 const cartModel = require("./models/cartModel");
 const orderModel = require("./models/orderModel");
+const bcrypt = require("bcrypt");
 
 exports.addUser = async (req, res) => {
+  const { username, password, phoneNumber, email } = req.body;
+  console.log(password);
   const data = new UsersModel({
-    username: req.body.username,
-    password: req.body.password,
-    phoneNumber: req.body.phoneNumber,
-    email: req.body.email,
+    username,
+    password: await bcrypt.hash(password, 10),
+    phoneNumber,
+    email,
   });
   try {
-    const dataToSave = await data.save();
-    res.status(200).json(dataToSave);
+    const user = await UsersModel.findOne({ username });
+    if (user) {
+      res.status(400).json({
+        message: `User already Registered with username: ${data.username} Please Login or use different username`,
+      });
+    } else {
+      const dataToSave = await data.save();
+      dataToSave.message = `User Registration Successfull with Name:${dataToSave.username}`;
+      res.status(200).json(dataToSave);
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const decryptedPassword = await bcrypt.hash(password, 10);
+    console.log(password);
+    console.log(decryptedPassword);
+    const data = await UsersModel.findOne({ username });
+    if (data) {
+      const check = await bcrypt.compare(password, data.password);
+      if (!check) {
+        res
+          .status(400)
+          .json({ message: "Please Check your Password and try again !!!" });
+      } else {
+        res.status(200).json({ message: "Login Success" });
+      }
+    } else {
+      res.status(400).json({ message: "Fail Please check your Credentials" });
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
