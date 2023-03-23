@@ -8,4 +8,6 @@ route.post("/order", controller.addOrder);
 route.get("/login", controller.getUser);
 route.get("/tablets", controller.getTablets);
 route.get("/mobiles", controller.getMobiles);
+route.get("/cart/:userName", controller.getCart);
+route.put("/cart/:userName", controller.putCart);
 module.exports = route;

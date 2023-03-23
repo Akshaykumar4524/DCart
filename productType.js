@@ -6,5 +6,6 @@ exports.product={
     "price":Number,
     "rating":Number,
     "manufacturer":String,
-    "osType":String
+    "osType":String,
+    "quantity":Number
 }

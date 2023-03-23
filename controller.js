@@ -114,6 +114,7 @@ exports.addCart = async (req, res) => {
     userName: req.body.userName,
     productsInCart: req.body.productsInCart,
     statusOfCart: req.body.statusOfCart,
+    quantity: 1,
   });
 
   try {
@@ -124,6 +125,51 @@ exports.addCart = async (req, res) => {
   }
 };
 
+exports.getCart = async (req, res) => {
+  try {
+    const userName = req.params.userName;
+
+    const data = await cartModel.findOne({ userName });
+
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.status(400).json({ message: "No cart under this username" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.putCart = async (req, res) => {
+  try {
+    const userName = req.params.userName;
+    console.log(userName);
+    const data = await cartModel.findOne({ userName });
+
+    if (data) {
+      const productsInCart = data.productsInCart;
+      const productInBody = req.body.productsInCart;
+      productInBody.forEach((ele) => {
+        const check_index = productsInCart.findIndex(
+          (item) => item.productId === ele.productId
+        );
+        if (check_index !== -1) {
+          productsInCart[check_index].quantity += ele.quantity;
+        } else {
+          productsInCart.push(ele);
+        }
+      });
+      data.productsInCart = productsInCart;
+      const updated = await cartModel.findOneAndUpdate({ userName }, data);
+      res.status(200).json(updated);
+    } else {
+      res.status(400).json({ message: "can not find cart with user" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 exports.addOrder = async (req, res) => {
   const data = new orderModel({
     orderId: req.body.orderId,
