@@ -4,6 +4,8 @@ const route = express.Router();
 route.post("/signup", controller.addUser);
 route.post("/product", controller.addProduct);
 route.post("/cart", controller.addCart);
-route.post("/order",controller.addOrder);
-route.get("/login",controller.getUser)
+route.post("/order", controller.addOrder);
+route.get("/login", controller.getUser);
+route.get("/tablets", controller.getTablets);
+route.get("/mobiles", controller.getMobiles);
 module.exports = route;

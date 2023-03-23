@@ -72,6 +72,42 @@ exports.addProduct = async (req, res) => {
   }
 };
 
+exports.getTablets = async (req, res) => {
+  try {
+    const data = await (
+      await productModel.find()
+    ).filter((product) => {
+      return product.productCode.startsWith("TAB");
+    });
+
+    if (data && data.length) {
+      res.status(200).json(data);
+    } else {
+      res.status(400).json({ message: "No Tablets available" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.getMobiles = async (req, res) => {
+  try {
+    const data = await (
+      await productModel.find()
+    ).filter((product) => {
+      return product.productCode.startsWith("MOB");
+    });
+
+    if (data && data.length) {
+      res.status(200).json(data);
+    } else {
+      res.status(400).json({ message: "No Mobiles available" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 exports.addCart = async (req, res) => {
   const data = new cartModel({
     cartId: req.body.cartId,
