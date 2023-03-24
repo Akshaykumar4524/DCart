@@ -72,6 +72,18 @@ exports.addProduct = async (req, res) => {
   }
 };
 
+exports.deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    console.log(productId);
+    const data = await productModel.findOneAndDelete({ productId: productId });
+    console.log(data);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 exports.getTablets = async (req, res) => {
   try {
     const data = await (
@@ -144,7 +156,6 @@ exports.getCart = async (req, res) => {
 exports.putCart = async (req, res) => {
   try {
     const userName = req.params.userName;
-    console.log(userName);
     const data = await cartModel.findOne({ userName });
 
     if (data) {
@@ -170,13 +181,21 @@ exports.putCart = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 exports.addOrder = async (req, res) => {
-  const data = new orderModel({
-    orderId: req.body.orderId,
-    cartId: req.body.cartId,
-  });
   try {
-    const dataToSave = await data.save();
+    const userName = req.params.userName;
+    const data = await cartModel.findOneAndUpdate(
+      { userName },
+      { statusOfCart: "close" }
+    );
+    const cartId = data.cartId;
+    const orderId = req.body.orderId;
+    const order = new orderModel({
+      orderId: orderId,
+      cartId: cartId,
+    });
+    const dataToSave = await order.save();
     res.status(200).json(dataToSave);
   } catch (error) {
     res.status(400).json({ messaghe: error.message });
