@@ -31,7 +31,6 @@ exports.addUser = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const decryptedPassword = await bcrypt.hash(password, 10);
     const data = await UsersModel.findOne({ username });
     if (data) {
       const check = await bcrypt.compare(password, data.password);
