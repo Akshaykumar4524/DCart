@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 
 exports.addUser = async (req, res) => {
   const { username, password, phoneNumber, email } = req.body;
-  console.log(password);
   const data = new UsersModel({
     username,
     password: await bcrypt.hash(password, 10),
@@ -33,8 +32,6 @@ exports.getUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const decryptedPassword = await bcrypt.hash(password, 10);
-    console.log(password);
-    console.log(decryptedPassword);
     const data = await UsersModel.findOne({ username });
     if (data) {
       const check = await bcrypt.compare(password, data.password);
@@ -75,9 +72,7 @@ exports.addProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   try {
     const productId = req.params.productId;
-    console.log(productId);
     const data = await productModel.findOneAndDelete({ productId: productId });
-    console.log(data);
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ message: error.message });
