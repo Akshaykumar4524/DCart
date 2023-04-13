@@ -3,7 +3,7 @@
 MCart is a capestone Project part of course I was doing on NodeJs which includes all basic CRUD operations </br>
 which includes ``get`` ```post``` ``put`` and ```delete```
 
- <strong>this is my first attempt to after learning nodeJs</strong>
+ <strong>this is my first attempt after learning nodeJs</strong>
 
 # Features
  1. Signup,Login
